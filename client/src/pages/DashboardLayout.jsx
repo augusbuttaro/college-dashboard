@@ -1,5 +1,5 @@
-import { Outlet, redirect, useLoaderData, useNavigate } from "react-router-dom"
-import { DesktopSidebar, MobileSidebar, Navbar } from "../components"
+import { Outlet, redirect, useLoaderData, useNavigate, useNavigation } from "react-router-dom"
+import { DesktopSidebar, MobileSidebar, Navbar, Loading } from "../components"
 import { createContext, useContext, useState } from "react"
 import customFetch from "../utils/customFetch"
 import { toast } from "react-toastify"
@@ -18,6 +18,8 @@ const DashboardContext = createContext()
 function DashboardLayout (){
     const { user } = useLoaderData()
     const navigate = useNavigate()
+    const navigation = useNavigation()
+    const isPageLoading = navigation.state === 'loading'
     const [showSidebar, setShowSidebar] = useState(false)
     const toggleSidebar = () => {
         setShowSidebar(!showSidebar)
@@ -37,7 +39,7 @@ function DashboardLayout (){
                     <Navbar />
                     <MobileSidebar />
                     <div className="flex-grow overflow-auto">
-                        <Outlet context={{ user }} />
+                        {isPageLoading? <Loading /> : <Outlet context={{ user }} />}
                     </div>
                 </div>
             </div>
