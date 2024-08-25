@@ -15,7 +15,7 @@ export const loader = async ({ params }) => {
   }
 };
 
-export const action = async ({ request, params }) => {
+export const action = (queryClient)=> async ({ request, params }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
 
@@ -45,6 +45,7 @@ export const action = async ({ request, params }) => {
 
   try {
     await customFetch.patch(`/classes/${params.id}`, data);
+    queryClient.invalidateQueries(['classes'])
     toast.success('Class updated successfully!');
     return redirect(`/dashboard/single-class/${params.id}`);
   } catch (error) {

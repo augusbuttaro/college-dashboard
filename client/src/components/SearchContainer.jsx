@@ -6,9 +6,10 @@ import { FaSearch } from 'react-icons/fa'
 import { useState, } from 'react'
 
 function SearchContainer (){
+    const {searchValues} = useAllClassesContext()
+    const { search, sort } = searchValues
+    console.log(sort)
     const submit = useSubmit()
-    const [sortValue, setSortValue] = useState('newest')
-
     const handleReset = (e) => {
         setSortValue('newest')
         submit(e.currentTarget.form)
@@ -34,6 +35,7 @@ function SearchContainer (){
                         name='search' 
                         labelText=''  
                         placeholder='Search...' 
+                        defaultValue={search}
                         onChange={debounce((form) =>{ submit(form) })}
                         autoComplete='off'
                         className='bg-dark-blue placeholder:text-lg placeholder:text-opac-picton-blue 
@@ -54,10 +56,9 @@ function SearchContainer (){
                             className='text-peach xl:text-lg' 
                             name='sort' 
                             onChange={(e)=>{
-                                setSortValue(e.target.value)
                                 submit(e.currentTarget.form)
                             }}
-                            value={sortValue}
+                            value={sort}
                             list={[...Object.values(CLASS_SORT_BY)]} 
                         />
                     </div>

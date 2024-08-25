@@ -30,9 +30,6 @@ function Class ({
     .sort((a, b) => a.date.diff(b.date)) 
     .find(exam => exam.date.isAfter(day())); 
 
-    console.log(exams)
-    console.log(upcomingExam)
-
   const nextExam = upcomingExam
     ? `${upcomingExam.date.format('DD/MM/YYYY')}`
     : '';

@@ -1,18 +1,24 @@
 import { ChartsContainer, StatsContainer } from "../components"
 import customFetch from "../utils/customFetch"
 import { useLoaderData } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query"
 
-export const loader = async () =>{
-    try {
+const statsQuery = {
+    queryKey:['stats'],
+    queryFn: async ()=> {
         const response = await customFetch.get('/classes/stats')
         return response.data
-    } catch (error) {
-        return error
     }
 }
 
+export const loader = (queryClient) => async () =>{
+    const data = await queryClient.ensureQueryData(statsQuery)
+    return data
+}
+
 function Stats (){
-    const { defaultStats, monthlyClasses } = useLoaderData()
+    const { data } = useQuery(statsQuery)
+    const { defaultStats, monthlyClasses } = data
     return (
         <div className="xl:p-12">
             <h1 className="text-peach w-full text-center text-2xl xl:my-10 my-6 font-semibold xl:text-3xl">STATS</h1>

@@ -1,4 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import {
   HomeLayout,
   Landing,
@@ -27,6 +30,15 @@ import { action as deleteClassAction } from './pages/DeleteClass'
 import { loader as adminLoader } from './pages/Admin'
 import { action as updateProfileAction } from './pages/Profile'
 import { loader as statsLoader } from './pages/Stats'
+import ErrorElement from "./components/ErrorElement";
+
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries:{
+      staleTime: 5000 * 60
+    }
+  }
+})
 
 const router = createBrowserRouter([
   {
@@ -46,32 +58,34 @@ const router = createBrowserRouter([
       {
         path:'login',
         element: <Login />,
-        action: loginAction
+        action: loginAction(queryClient)
       },
       {
         path:'dashboard',
-        element: <DashboardLayout />,
-        loader: dashboardLoader,
+        element: <DashboardLayout queryClient={queryClient} />,
+        loader: dashboardLoader(queryClient),
         children:[
           {
             index:true,
             element:<AllClasses />,
-            loader: allClassesLoader
+            loader: allClassesLoader(queryClient),
+            errorElement: <ErrorElement />
           },
           {
             path:'stats',
             element:<Stats />,
-            loader: statsLoader
+            loader: statsLoader(queryClient),
+            errorElement:<ErrorElement />
           },
           {
             path:'add-class',
             element:<AddClass />,
-            action:addClassAction
+            action:addClassAction(queryClient)
           },
           {
             path:'profile',
             element:<Profile />,
-            action: updateProfileAction
+            action: updateProfileAction(queryClient)
           },
           {
             path:'admin',
@@ -87,11 +101,11 @@ const router = createBrowserRouter([
             path:'edit-class/:id',
             element:<EditClass />,
             loader:editClassLoader,
-            action:editClassAction
+            action:editClassAction(queryClient)
           },
           {
             path:'delete-class/:id',
-            action:deleteClassAction
+            action:deleteClassAction(queryClient)
           }
         ]
       },
@@ -103,7 +117,10 @@ const router = createBrowserRouter([
 function App() {
   
   return (
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   )
 }
 

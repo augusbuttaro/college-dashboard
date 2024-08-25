@@ -6,7 +6,7 @@ import PageContainer from "./PageContainer"
 function ClassContainer (){
     const { data } = useAllClassesContext()
     const { classes, totalClasses, numOfPages } = data
-    console.log(classes)
+    
     if(classes.length === 0){
         return(
             <h1 className="text-peach text-3xl text-center mt-24">No classes to display, add one <Link to='add-class' className="text-orange hover:text-picton-blue duration-200">here!</Link>

@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import { useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
+import { QueryClient } from "@tanstack/react-query";
 
-export const action = async({ request }) =>{
+export const action = (queryClient) => async({ request }) =>{
   const formData = await request.formData()
   const data = Object.fromEntries(formData)
 
@@ -36,6 +37,7 @@ export const action = async({ request }) =>{
 
   try {
     await customFetch.post('/classes', data)
+    queryClient.invalidateQueries(['classes'])
     toast.success('Class added successfully')
     return redirect('/dashboard')
   } catch (error) {

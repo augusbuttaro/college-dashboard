@@ -4,11 +4,12 @@ import logo from '../assets/only-logo.png'
 import { toast } from 'react-toastify';
 import customFetch from '../utils/customFetch';
 
-export const action = async ({ request })=>{
+export const action = (queryClient) => async ({ request })=>{
     const formData = await request.formData()
     const data = Object.fromEntries(formData)
     try {
         await customFetch.post('/auth/login', data)
+        queryClient.invalidateQueries()
         toast.success('Login Successfull')
         return redirect('/dashboard')
     } catch (error) {

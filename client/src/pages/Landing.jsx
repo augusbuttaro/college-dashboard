@@ -19,7 +19,7 @@ function Landing (){
                         Register
                     </Link>
                     <Link to='/login' className='bg-picton-blue px-4 py-2 xl:px-8 xl:py-4 xl:text-lg self-center font-semibold rounded-full hover:text-cream duration-200'>
-                        Login / Demo 
+                        Login
                     </Link>
                 </div>
             </div>
